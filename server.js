@@ -16,6 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -25,8 +26,11 @@ app.use(cors({
     "https://fredmassociates.com",
     "https://www.fredmassociates.com"
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
 app.use(express.json());
 
 // Static uploads folder
@@ -41,8 +45,8 @@ app.use("/api/advertisements", advertisementsRouter);
 
 console.log("✅ Routes loaded");
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5002;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on cPanel internal port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
