@@ -96,19 +96,6 @@ router.post("/signup", async (req, res) => {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    const userCount = await pool.query(
-      "SELECT COUNT(*)::int AS count FROM users"
-    );
-
-    const totalUsers = userCount.rows[0].count;
-
-    if (totalUsers > 0) {
-      return res.status(403).json({
-        message:
-          "Public signup is disabled. An existing administrator must create new users.",
-      });
-    }
-
     const existingUser = await pool.query(
       "SELECT id FROM users WHERE email = $1",
       [normalizedEmail]
@@ -139,7 +126,6 @@ router.post("/signup", async (req, res) => {
     });
   } catch (error) {
     console.error("Signup error:", error);
-
     res.status(500).json({
       message: "Server error while creating account",
     });
